@@ -1,4 +1,9 @@
+import robocode.AdvancedRobot;
+import robocode.HitRobotEvent;
+import robocode.ScannedRobotEvent;
 
+import robocode.WinEvent;
+import static robocode.util.Utils.normalRelativeAngleDegrees;
 import robocode.*;
 //import java.awt.Color;
 
@@ -7,50 +12,47 @@ import robocode.*;
 /**
  * RoboUgurcan - a robot by (your name here)
  */
-public class RoboUgurcan extends Robot
+public class RoboUgurcan extends AdvancedRobot
 {
 	/**
-	 * run: RoboUgurcan's default behavior
+	 * SpinBot's run method - Circle
 	 */
+
+
 	public void run() {
-		// Initialization of the robot should be put here
 
-		// After trying out your robot, try uncommenting the import at the top,
-		// and the next line:
-
-		// setColors(Color.red,Color.blue,Color.green); // body,gun,radar
-
-		// Robot main loop
-		while(true) {
-			// Replace the next 4 lines with any behavior you would like
-			ahead(100);
-			turnGunRight(360);
-			back(100);
-			turnGunRight(360);
+		// Loop forever
+		while (true) {
+			// Tell the game that when we take move,
+			// we'll also want to turn right... a lot.
+			setTurnLeft(1500);
+			// Limit our speed to 5
+			setMaxVelocity(6);
+			// Start moving (and turning)
+			ahead(1500);
+			// Repeat.
+			
 		}
 	}
 
 	/**
-	 * onScannedRobot: What to do when you see another robot
+	 * onScannedRobot: Fire hard!
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		// Replace the next line with any behavior you would like
-		fire(1);
+		fire(3);
 	}
 
+
 	/**
-	 * onHitByBullet: What to do when you're hit by a bullet
+	 * onHitRobot:  If it's our fault, we'll stop turning and moving,
+	 * so we need to turn again to keep spinning.
 	 */
-	public void onHitByBullet(HitByBulletEvent e) {
-		// Replace the next line with any behavior you would like
-		back(10);
+	public void onHitRobot(HitRobotEvent e) {
+		if (e.getBearing() > -10 && e.getBearing() < 10) {
+			fire(3);
+		}
+		if (e.isMyFault()) {
+			turnRight(10);
+		}
 	}
-	
-	/**
-	 * onHitWall: What to do when you hit a wall
-	 */
-	public void onHitWall(HitWallEvent e) {
-		// Replace the next line with any behavior you would like
-		back(20);
-	}	
 }
